@@ -3,7 +3,7 @@
 
 class Event
 {
-    private  $tekst;
+    private $tekst;
     private $choicesID;
     private $imagePath;
 

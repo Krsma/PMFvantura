@@ -166,24 +166,51 @@ class Database
         }
 
     }
+    public function getRunStartTime($username)
+    {
+        $sqlQuery = "SELECT " . COL_RUN_START_TIME . " FROM " . TBL_RUN ." WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " .  COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME. " IS NULL;";
+        try
+        {
+            $query = $this->conn->prepare($sqlQuery);
+            $query->bindValue(":username", $username);
+            $query->execute();
+
+            return $query->fetch()[0];
+        }
+        catch (PDOException $e)
+        {
+            echo $e->getMessage();
+            return false;
+        }
+
+    }
     public function dropRun($username)
     {
         $sqlQuery = "DELETE FROM " . TBL_RUN . " WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " .  COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME. " IS NULL;";
-        $query = $this->conn->prepare($sqlQuery);
+        try
+        {
+            $query = $this->conn->prepare($sqlQuery);
 
-        $query->bindValue(":username", $username);
-        $query->execute();
+            $query->bindValue(":username", $username);
+            $query->execute();
+        }
+        catch (PDOException $e)
+        {
+            echo $e->getMessage();
+            return false;
+        }
+
     }
     public function endRun($username, $endTime)
     {
+        $sqlQuery = "UPDATE " . TBL_RUN . " SET ". COL_RUN_ENDTIME ."=:endTime WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " .  COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME . " IS NULL;";
         try
         {
-            $sqlQuery = "UPDATE " . TBL_RUN . " SET". COL_RUN_ENDTIME ."=:endTime WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " .  COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME . " IS NULL;";
 
             $query = $this->conn->prepare($sqlQuery);
 
-            $query->bindValue(":id", $username);
-            $query->bindValue("endTime", $endTime);
+            $query->bindValue(":username", $username);
+            $query->bindValue(":endTime", $endTime);
             $query->execute();
 
         }
@@ -193,5 +220,28 @@ class Database
             return false;
         }
     }
+    public function getRuns($username, $getAll = false)
+    {
+        if($getAll)
+        {
+            $sqlQuery = " SELECT * FROM " . TBL_RUN . " WHERE " . COL_RUN_ENDTIME . " IS NOT NULL";
+        }
+        else
+        {
+            $sqlQuery = " SElECT * FROM " . TBL_RUN . " WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " . COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME . " IS NOT NULL;";
+        }
 
+        try {
+            $query = $this->conn->prepare($sqlQuery);
+            $query->bindValue(":username", $username);
+
+            $query->execute();
+            return $query->fetchAll();
+        }
+        catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+
+        }
+    }
 }
