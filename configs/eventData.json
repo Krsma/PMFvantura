@@ -1,0 +1,11 @@
+{
+  "start" : {"tekst" : "Cilj igre je da polozis ispit, tako sto ces nabaviti skripte i nauciti u citaonici. <br> Kreces se klikom na dugme sa izabranom opcijom", "slika" : "images/pmf.jpg", "opcije":["napolje"]},
+  "napolje" : {"tekst": "Stojis ispred zgrada PMF. Kuda sada?", "slika": "images/pmf.jpg", "opcije":  ["biologija", "plava", "matematika"]},
+  "biologija" : {"tekst":"Usao si u zgradu departmana Biologije. <br> Deeeefinitivno ne pripadas ovde...", "slika":"images/biologija.jpg", "opcije":["napolje"]},
+  "plava" : {"tekst" : "Usao si u veliku plavu zgradu. Mnogo salter, mnogo redova... Kuda dalje?" , "slika":"images/studentska.jpg"  , "opcije": ["salter", "skriptarnica", "napolje"]},
+  "salter" : {"tekst": "Cekaces ovde zauvek" , "slika":"images/studentska.jpg", "opcije": ["plava"]},
+  "skriptarnica" : {"tekst":  "Izgleda da ovde imaju ono sto treba da naucis za ispit! Pronasao si skripte!", "slika": "images/knjige.jpg", "opcije": ["plava"]},
+  "matematika" : {"tekst": "Usao si u zgradu Departmana za matematiku" , "slika": "images/matematika.jpg" , "opcije" :  ["napolje", "amfiteatar", "citaonica"]},
+  "amfiteatar" : {"tekst": "Usao si na ispit. <br> Nadam se da imas skripte...." , "slika": "images/amfiteatar.jpg" , "opcije" :  ["matematika"]},
+  "citaonica" : {"tekst":  "Muk i tisina. Svi uce. Mozda bi mogao i ti", "slika":  "images/citaonica.jpg", "opcije" :  ["matematika"]}
+}

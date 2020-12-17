@@ -1,0 +1,8 @@
+create schema webProjekat;
+
+use webProjekat;
+create table User (id int auto_increment, username varchar(100), password varchar(100), email varchar(100), primary key (id));
+
+create table Run(id int auto_increment, startTime varchar(100), endTime varchar(100) userId int,  primary key(id), foreign key (userId) references User(id));
+
+
