@@ -47,7 +47,7 @@ function startNewRun($username, $db)
     {
         $db->dropRun($username);
     }
-    $db->insertRun($username, date('d/m/Y h:i:s', time()));
+    $db->insertRun($username, date('Y-m-d h:i:s', time()));
 
 
 //    $date = DateTime::createFromFormat('d/m/Y h:i:s', $date);

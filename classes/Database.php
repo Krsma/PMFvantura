@@ -45,6 +45,7 @@ class Database
 
             $query = $this->conn->prepare($sqlQuery);
             $query->bindValue(":username", $username);
+            print_r(crypt($password, $this->hashSalt));
             $query->bindValue(":password", crypt($password, $this->hashSalt));
             $query->bindValue(":email", $email);
 
@@ -79,9 +80,10 @@ class Database
     }
     public function loginUser($username, $password)
     {
-        $sqlQuery = "SELECT * FROM " . TBL_USER . " WHERE " . COL_USER_USERNAME  . "=:username AND " . COL_USER_PASSWORD . "= :password;";
+        $sqlQuery = "SELECT * FROM " . TBL_USER . " WHERE " . COL_USER_USERNAME  . "=:username AND " . COL_USER_PASSWORD . "=:password;";
         try
         {
+            //print_r($sqlQuery);
             if(!$this->checkIfUserExists($username))
             {
                 print_r("User ne postoji");
@@ -90,13 +92,14 @@ class Database
 
             $query = $this->conn->prepare($sqlQuery);
             $query->bindValue(":username", $username);
+            //print_r(crypt($password, $this->hashSalt));
             $query->bindValue(":password", crypt($password, $this->hashSalt));
 
             $query->execute();
             $results = $query->fetchAll();
             //print_r("Rezulat logina");
             //print_r($results);
-            return (empty($results));
+            return (! empty($results));
         }
         catch (PDOException $e)
         {
@@ -220,17 +223,10 @@ class Database
             return false;
         }
     }
-    public function getRuns($username, $getAll = false)
+    public function getRuns($username)
     {
-        if($getAll)
-        {
-            $sqlQuery = " SELECT * FROM " . TBL_RUN . " WHERE " . COL_RUN_ENDTIME . " IS NOT NULL";
-        }
-        else
-        {
-            $sqlQuery = " SElECT * FROM " . TBL_RUN . " WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " . COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME . " IS NOT NULL;";
-        }
 
+        $sqlQuery = " SElECT * FROM " . TBL_RUN . " WHERE " . COL_RUN_USERID . " = ( SELECT " . COL_USER_ID . " FROM " . TBL_USER . " WHERE " . COL_USER_USERNAME . "=:username)" . " AND " . COL_RUN_ENDTIME . " IS NOT NULL;";
         try {
             $query = $this->conn->prepare($sqlQuery);
             $query->bindValue(":username", $username);
@@ -239,6 +235,23 @@ class Database
             return $query->fetchAll();
         }
         catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+
+        }
+    }
+    public function  getAllRuns()
+    {
+        $sqlQuery = " SELECT " . COL_USER_USERNAME . ", " . COL_RUN_START_TIME . ", " . COL_RUN_ENDTIME . " FROM " . TBL_RUN . " INNER JOIN " . TBL_USER . " ON " . COL_RUN_USERID . "=user." . COL_USER_ID . ";";
+        //print_r($sqlQuery);
+        try
+        {
+            $query = $this->conn->prepare($sqlQuery);
+            $query->execute();
+            return $query->fetchAll();
+        }
+        catch (PDOException $e)
+        {
             echo $e->getMessage();
             return false;
 

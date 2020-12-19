@@ -2,11 +2,40 @@
 
 require_once("configs/constants.php");
 require_once("classes/Database.php");
+require_once("classes/Event.php"); // MOve the timeDiff function out of the event.php file
+function showBestRuns($db)
+{
+    $runs = $db->getAllRuns();
+    //sort runs and get 5 best
+    usort($runs, "compareRuns");
+    $table = "<table style=\"width:100%\"> <tr> <th>Username</th> <th>Time spent</th> <th>Start Time</th> <th> End Time</th> ";
+    $runNumber = 1;
+    foreach($runs as $run)
+    {
+        $startTime = $run["startTime"];
+        $endTime = $run["endTime"];
+//        $timeDiff = strtotime($endTime) - strtotime($endTime); // fix
+        $timeDiff = Event::getTimeDiff($endTime, $startTime);
+        $username = $run["username"];
+        $table .= "<tr> <td> $username </td><td> $timeDiff</td> <td>$startTime</td> <td>$endTime</td> </tr>";
+        $runNumber += 1;
+    }
+    $table .= "</table>";
+    echo $table;
+}
+function compareRuns($run1, $run2)
+{
+    $timeDiff1 = Event::getTimeDiff($run1["startTime"],$run1["endTime"]);
+    $timeDiff2 = Event::getTimeDiff($run2["startTime"], $run2["endTime"]);
+    return strcmp($timeDiff1, $timeDiff2);
+
+}
 
 $db = new Database("configs/config.ini");
 $errors = [];
 $messages = [];
 
+//$allRuns = $db->getRuns("", true);
 // reroute to login and register to game.php
 
 if(isset($_POST["registerButton"]))
@@ -105,6 +134,10 @@ if(isset($_POST["loginButton"]))
 
             <input type="submit" name="registerButton" value="Register">
         </form>
+    </div>
+    <div>
+        <h>Rang lista</h><br>
+        <?php showBestRuns($db) ?>
     </div>
 </body>
 

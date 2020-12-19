@@ -1,6 +1,10 @@
 <?php
 require_once("configs/constants.php");
 require_once("classes/Database.php");
+require_once("classes/Event.php");
+
+$db = new Database("configs/config.ini");
+
 
 function showAllRuns($runs)
 {
@@ -10,7 +14,8 @@ function showAllRuns($runs)
     {
         $startTime = $run["startTime"];
         $endTime = $run["endTime"];
-        $timeDiff = strtotime($endTime) - strtotime($endTime); // fix
+        //$timeDiff = strtotime($endTime) - strtotime($endTime); // fix
+        $timeDiff = Event::getTimeDiff($endTime, $startTime);
         $table .= "<tr> <td> $runNumber </td><td> $timeDiff</td> <td>$startTime</td> <td>$endTime</td> </tr>";
         $runNumber += 1;
     }
@@ -25,17 +30,22 @@ if(! isset($_SESSION["username"]))
 }
 
 
-$db = new Database("configs/config.ini");
 
 if(isset($_POST["username"]))
 {
     $startTime = $db->getRunStartTime($_SESSION["username"]);
-    $endTime = date('d/m/Y h:i:s', time());
-    $timeDiff = strtotime($endTime) - strtotime($startTime);
+    $endTime = date('Y-m-d h:i:s', time());
+//  $timeDiff = strtotime($endTime) - strtotime($startTime);
+    $timeDiff = Event::getTimeDiff($endTime, $startTime);
+    setcookie("timeDiff", $timeDiff);
     $db->endRun($_SESSION["username"], $endTime);
 
     $runData = $db->getRuns($_SESSION["username"]);
-    print_r($runData);
+    //print_r($runData);
+}
+elseif(isset($_GET["diploma"]) && isset($_COOKIE["timeDiff"]))
+{
+    generateDiploma($_COOKIE["timeDiff"], $_SESSION["username"]);
 }
 else
 {
@@ -48,6 +58,7 @@ else
 <body>
     <h>Svaka cast, presao si igricu</h><br>
     <h>Tvoje vreme je <?php echo $timeDiff?></h><br>
+    <button onclick="location.href='diploma.php?timeDiff=<?php echo $timeDiff?> '" type="button"> Generate a diploma for game completion</button><br>
     <h>Da li zelis diplomu za prelazak?></h><br>
     <div>
         <?php showAllRuns($runData); ?>

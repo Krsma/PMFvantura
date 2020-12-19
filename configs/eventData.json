@@ -7,5 +7,5 @@
   "skriptarnica" : {"tekst":  "Izgleda da ovde imaju ono sto treba da naucis za ispit! Pronasao si skripte!", "slika": "images/knjige.jpg", "opcije": ["plava"]},
   "matematika" : {"tekst": "Usao si u zgradu Departmana za matematiku" , "slika": "images/matematika.jpg" , "opcije" :  ["napolje", "amfiteatar", "citaonica"]},
   "amfiteatar" : {"tekst": "Usao si na ispit. <br> Nadam se da imas skripte...." , "slika": "images/amfiteatar.jpg" , "opcije" :  ["matematika"]},
-  "citaonica" : {"tekst":  "Muk i tisina. Svi uce. Mozda bi mogao i ti", "slika":  "images/citaonica.jpg", "opcije" :  ["matematika"]}
+  "citaonica" : {"tekst":  "Muk i tisina. Svi uce. Mozda bi mogao i ti. <br> Naucio si materijal za ispit.", "slika":  "images/citaonica.jpg", "opcije" :  ["matematika"]}
 }

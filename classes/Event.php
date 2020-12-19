@@ -38,7 +38,13 @@ class Event
 //                 <div< $this->getButtons()</div>";
         $out = "<div>  <div> <img src=\"". $this->imagePath . "\"> </div>  <div>" . $this->tekst . "</div> <div>" . $this->getButtons() . "</div></div>";
         return $out;
-
+    }
+    public static function getTimeDiff($time1, $time2)
+    {
+        $t1 = new DateTime($time1);
+        $t2 = new DateTime($time2);
+        $timeDiff = $t2->diff($t1);
+        return $timeDiff->format('%h:%i:%s');
     }
 }
 
