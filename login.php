@@ -32,8 +32,7 @@ function compareRuns($run1, $run2)
 }
 
 $db = new Database("configs/config.ini");
-$errors = [];
-$messages = [];
+
 
 //$allRuns = $db->getRuns("", true);
 // reroute to login and register to game.php
@@ -59,7 +58,7 @@ if(isset($_POST["registerButton"]))
 
        $registerResult = $db->insertUser($registerData["username"], $registerData["password"], $registerData["email"]);
        print_r($registerResult);
-       $messages[] = $registerResult;
+
     }
 
 }
@@ -78,10 +77,10 @@ if(isset($_POST["loginButton"]))
     if(isset($password) && isset($username))
     {
         $login = $db->loginUser($username, $password);
-        print_r($login);
+        //print_r($login);
         if($login)
         {
-            print_r("Uspesan login");
+            //print_r("Uspesan login");
             session_start();
             $_SESSION["username"] = $username;
             header("Location: landing.php");

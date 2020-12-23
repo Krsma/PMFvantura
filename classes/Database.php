@@ -45,7 +45,7 @@ class Database
 
             $query = $this->conn->prepare($sqlQuery);
             $query->bindValue(":username", $username);
-            print_r(crypt($password, $this->hashSalt));
+            //print_r(crypt($password, $this->hashSalt));
             $query->bindValue(":password", crypt($password, $this->hashSalt));
             $query->bindValue(":email", $email);
 

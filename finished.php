@@ -4,7 +4,7 @@ require_once("classes/Database.php");
 require_once("classes/Event.php");
 
 $db = new Database("configs/config.ini");
-
+$runData = array();
 
 function showAllRuns($runs)
 {
@@ -14,7 +14,6 @@ function showAllRuns($runs)
     {
         $startTime = $run["startTime"];
         $endTime = $run["endTime"];
-        //$timeDiff = strtotime($endTime) - strtotime($endTime); // fix
         $timeDiff = Event::getTimeDiff($endTime, $startTime);
         $table .= "<tr> <td> $runNumber </td><td> $timeDiff</td> <td>$startTime</td> <td>$endTime</td> </tr>";
         $runNumber += 1;
@@ -35,7 +34,7 @@ if(isset($_POST["username"]))
 {
     $startTime = $db->getRunStartTime($_SESSION["username"]);
     $endTime = date('Y-m-d h:i:s', time());
-//  $timeDiff = strtotime($endTime) - strtotime($startTime);
+
     $timeDiff = Event::getTimeDiff($endTime, $startTime);
     setcookie("timeDiff", $timeDiff);
     $db->endRun($_SESSION["username"], $endTime);

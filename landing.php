@@ -6,7 +6,7 @@ if(! isset($_SESSION["username"]))
     header("Location: login.php");
 }
 
-if(isset($_GET["logout"]) && $_GET["logout"] == "true")
+if(isset($_GET["logout"]))
 {
     session_destroy();
     unset($_COOKIE["skripte"]);
@@ -23,8 +23,7 @@ if(isset($_GET["logout"]) && $_GET["logout"] == "true")
 <html>
 <body>
     <h>Currently logged in as player <?php echo $_SESSION["username"];?></h><br>
-    <button onclick= location.href='?logout=true' type=button >Log out </button>
-    <h> Current best time is: TO BE ADDED</h><br>
+    <button onclick= location.href='?logout' type=button >Log out </button>
 
     <div>
         <h>If you have a run you already started, it will be discarded</h>

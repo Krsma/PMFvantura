@@ -7,12 +7,7 @@ class Event
     private $choicesID;
     private $imagePath;
 
-    /**
-     * event constructor.
-     * @param $tekst
-     * @param $choicesID
-     * @param $imagePath
-     */
+
     public function __construct($tekst, $imagePath, $choicesID)
     {
         $this->tekst = $tekst;
@@ -32,10 +27,7 @@ class Event
     }
     public function getHtml()
     {
-//        $out = " <div>
-//                 <div> <<img src=$this->imagePath>></div>
-//                 <div> $this->tekst </div>
-//                 <div< $this->getButtons()</div>";
+
         $out = "<div>  <div> <img src=\"". $this->imagePath . "\"> </div>  <div>" . $this->tekst . "</div> <div>" . $this->getButtons() . "</div></div>";
         return $out;
     }

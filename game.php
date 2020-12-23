@@ -23,10 +23,7 @@ function getEventData($path="configs/eventData.json")
 }
 function finishGameButton()
 {
-//    $a = isset($_COOKIE["skripte"]);
-//    $b = isset($_COOKIE["nauceno"]);
-//    $c = isset($_SESSION["username"]);
-//    $d = htmlspecialchars($_GET["spot"]) == "amfiteatar";
+
     if(isset($_COOKIE["skripte"]) && isset($_COOKIE["nauceno"]) && isset($_SESSION["username"]) && isset($_GET["spot"]) && htmlspecialchars($_GET["spot"]) == "amfiteatar")
     {
         return "<div>
@@ -41,25 +38,16 @@ function finishGameButton()
 }
 function startNewRun($username, $db)
 {
-    //$userID = $db->getUserId($username)["id"];
-    //print_r($userID);
-    if($db->checkIfRunStarted($username))  // nekak osvesti na jedan query
+    if($db->checkIfRunStarted($username))
     {
         $db->dropRun($username);
     }
     $db->insertRun($username, date('Y-m-d h:i:s', time()));
-
-
-//    $date = DateTime::createFromFormat('d/m/Y h:i:s', $date);
-    // vazno za kasnije
 }
 
 $currentSpot = "start";
 $currentEvent = null;
 $eventData = getEventData();
-//print_r($eventData);
-
-//$userID = $db->getUserId($_SESSION["username"])["id"];
 
 if(isset($_POST["username"]) && isset($_POST["newRun"]))
 {
@@ -70,11 +58,14 @@ if(isset($_POST["username"]) && isset($_POST["newRun"]))
 
 
 
-if(isset($_GET["spot"]))    // checking if the get data is safe and valide
+if(isset($_GET["spot"]))
 {
     if(!  array_key_exists(htmlspecialchars($_GET["spot"]), $eventData))
     {
-        print_r("INVALID CHARS IN URL ");
+        echo '<script type="text/javascript">';
+        echo 'alert("Nije validna lokacija. Bices vracen na pocetak igre.");';
+        echo 'window.location.href = "game.php";';
+        echo '</script>';
         exit();
     }
     $currentSpot = $_GET["spot"];
@@ -85,12 +76,7 @@ if(isset($_GET["spot"]))    // checking if the get data is safe and valide
     }
 
 }
-
-
-//print_r($eventData);
-
 $currentEvent = new Event($eventData[$currentSpot]["tekst"], $eventData[$currentSpot]["slika"], $eventData[$currentSpot]["opcije"]);
-
 ?>
 
 <html>
