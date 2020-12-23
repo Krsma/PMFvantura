@@ -38,6 +38,14 @@ function finishGameButton()
 }
 function startNewRun($username, $db)
 {
+    // Ubijamo cookieje sa prethodnih pokusaja
+    setcookie("timeDiff", "");
+    setcookie("skripte", "");
+    setcookie("nauceno", "");
+    unset($_COOKIE["skripte"]);
+    unset($_COOKIE["nauceno"]);
+    unset($_COOKIE["timeDiff"]);
+
     if($db->checkIfRunStarted($username))
     {
         $db->dropRun($username);
@@ -51,6 +59,7 @@ $eventData = getEventData();
 
 if(isset($_POST["username"]) && isset($_POST["newRun"]))
 {
+
     startNewRun($_SESSION["username"], $db);
 }
 
@@ -80,7 +89,6 @@ $currentEvent = new Event($eventData[$currentSpot]["tekst"], $eventData[$current
 ?>
 
 <html>
-
 <head>
 <title> Currently Exploring</title>
 </head>

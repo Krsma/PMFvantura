@@ -38,7 +38,7 @@ class Database
 
             if($this->checkIfUserExists($username))
             {
-                echo "Vec postoji korisnik";
+                echo "Vec postoji korisnik    ";
                 return false;
             }
             //DOdaje provere da li vec postoji user

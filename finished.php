@@ -32,19 +32,26 @@ if(! isset($_SESSION["username"]))
 
 if(isset($_POST["username"]))
 {
-    $startTime = $db->getRunStartTime($_SESSION["username"]);
-    $endTime = date('Y-m-d h:i:s', time());
+    if(!isset($_COOKIE["timeDiff"]))
+    {
+        $startTime = $db->getRunStartTime($_SESSION["username"]);
+        $endTime = date('Y-m-d h:i:s', time());
 
-    $timeDiff = Event::getTimeDiff($endTime, $startTime);
-    setcookie("timeDiff", $timeDiff);
-    $db->endRun($_SESSION["username"], $endTime);
+        $timeDiff = Event::getTimeDiff($endTime, $startTime);
+        setcookie("timeDiff", $timeDiff);
+        $db->endRun($_SESSION["username"], $endTime);
 
+        setcookie("nauceno","");
+        setcookie("skripte","");
+        unset($_COOKIE["skripte"]);
+        unset($_COOKIE["nauceno"]);
+    }
+    else
+    {
+        $timeDiff = $_COOKIE["timeDiff"];
+    }
     $runData = $db->getRuns($_SESSION["username"]);
     //print_r($runData);
-}
-elseif(isset($_GET["diploma"]) && isset($_COOKIE["timeDiff"]))
-{
-    generateDiploma($_COOKIE["timeDiff"], $_SESSION["username"]);
 }
 else
 {
@@ -55,13 +62,13 @@ else
 
 <html>
 <body>
-    <h>Svaka cast, presao si igricu</h><br>
-    <h>Tvoje vreme je <?php echo $timeDiff?></h><br>
+    <h1>Svaka cast <?php echo $_SESSION["username"]?>, presao si igricu</h1><br>
+    <h2>Tvoje vreme je <?php echo $timeDiff?></h2><br>
+    <h3>Da li zelis diplomu za prelazak igre?</h3><br>
     <button onclick="location.href='diploma.php?timeDiff=<?php echo $timeDiff?> '" type="button"> Generate a diploma for game completion</button><br>
-    <h>Da li zelis diplomu za prelazak?></h><br>
     <div>
         <?php showAllRuns($runData); ?>
     </div>
-    <button onclick= location.href='landing.php' type=button >Go back to home </button>
+    <button onclick= location.href='landing.php' type=button >Vrati se pocetnu stranicu i mozes ponovo probati da predjes igricu</button>
 </body>
 </html>

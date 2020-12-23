@@ -58,6 +58,14 @@ if(isset($_POST["registerButton"]))
 
        $registerResult = $db->insertUser($registerData["username"], $registerData["password"], $registerData["email"]);
        print_r($registerResult);
+       if($registerData == 1)
+       {
+           echo "Uspesna registracija";
+       }
+       else
+       {
+           echo "Nismo uspeli da vas registrujemo";
+       }
 
     }
 
@@ -65,6 +73,7 @@ if(isset($_POST["registerButton"]))
 if(isset($_POST["loginButton"]))
 {
     //print_r($_POST["loginButton"]);
+    //session_destroy(); // izbegavanje problema kada je neki korisnik vec ulogovan
     if($_POST["username"])
     {
         $username = htmlspecialchars($_POST["username"]);
